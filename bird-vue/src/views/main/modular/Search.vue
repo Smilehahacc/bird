@@ -1,7 +1,15 @@
 // 图片搜索下载（爬虫）功能页面
 <template>
-  <div id='app'>
-    爬虫
+  <div class="block">
+    <span class="demonstration">时 间</span>
+    <el-date-picker
+      v-model="timevalue"
+      align="center"
+      type="daterange"
+      range-separator="-"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期">
+    </el-date-picker>
   </div>
 </template>
 
@@ -10,6 +18,7 @@ export default {
   name: 'search',
   data () {
     return {
+      timevalue: ''
     }
   },
   components: {
