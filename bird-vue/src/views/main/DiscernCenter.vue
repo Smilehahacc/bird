@@ -90,6 +90,7 @@ export default {
   width: 200px;
   min-height: 600px;
   margin-right: 0px;
+  z-index: 999;
 }
 /* 内容面板，包含爬虫、图像标记、图像分类和算法评估四大功能 */
 .right-content {
