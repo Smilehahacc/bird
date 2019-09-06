@@ -6,6 +6,7 @@
       <el-date-picker
         v-model="timevalue"
         align="center"
+        value-format="yyyy-MM-dd"
         type="daterange"
         range-separator="——"
         start-placeholder="开始日期"
@@ -73,6 +74,7 @@ export default {
       console.log(this.timevalue)
       console.log(this.currentRow.source)
     },
+    // 点击时期选择器后存值
     handleCurrentChange (val) {
       this.currentRow = val
     }
