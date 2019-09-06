@@ -28,7 +28,7 @@
           </el-table-column>
         </el-table>
         <div style="margin-top: 20px">
-          <el-button @click="setCurrent(tableData[1])">启动</el-button>
+          <el-button @click="pushdata()">启动</el-button>
           <el-button @click="setCurrent()">重置</el-button>
         </div>
       </div>
@@ -41,6 +41,7 @@ export default {
   name: 'search',
   data () {
     return {
+      currentRow: null,
       timevalue: '',
       tableData: [{
         source: '百度'
@@ -61,8 +62,16 @@ export default {
 
   },
   methods: {
+    // 重置函数 重置时间和来源
     setCurrent (row) {
+      this.timevalue = ''
       this.$refs.singleTable.setCurrentRow(row)
+    },
+    // 启动函数 给后台传值 暂时写成弹窗
+    pushdata () {
+      console.log(123)
+      console.log(this.timevalue)
+      console.log(this.currentRow.source)
     },
     handleCurrentChange (val) {
       this.currentRow = val
