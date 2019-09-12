@@ -12,10 +12,13 @@
       <img v-if="imageUrl" :src="imageUrl" class="avatar" />
       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
     </el-upload>
+    <el-button @click="clean">开始识别</el-button>
+    <div class='biaoge'>
     <el-table :data="tableData" style="width: 100%">
       <el-table-column prop="date" label='算法' width="180"></el-table-column>
       <el-table-column prop="name" label='分析结果' width="180"></el-table-column>
     </el-table>
+    </div>
   </div>
 </template>
 
@@ -79,5 +82,10 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
+}
+.biaoge {
+  position:absolute;
+  left:650px;
+  top:450px;
 }
 </style>
