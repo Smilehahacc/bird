@@ -14,14 +14,14 @@
           </a>
           <DropdownMenu slot="list"
                         style="text-align:center">
-            <DropdownItem :style="{display:!isLogin?'':'none'}">
+            <DropdownItem v-if="!isLogin">
               <router-link to="/login"><a class='menu'>登录</a></router-link>
             </DropdownItem>
-            <DropdownItem :style="{display:isLogin?'':'none'}"><a class='menu'
+            <DropdownItem v-if="isLogin"><a class='menu'
                  @click="user">个人中心</a></DropdownItem>
-            <DropdownItem :style="{display:isLogin?'':'none'}"><a class='menu'
+            <DropdownItem v-if="isLogin"><a class='menu'
                  @click="setting">设置</a></DropdownItem>
-            <DropdownItem :style="{display:isLogin?'':'none'}"><a class='menu'
+            <DropdownItem v-if="isLogin"><a class='menu'
                  @click="logout">退出</a></DropdownItem>
           </DropdownMenu>
         </Dropdown>
@@ -41,7 +41,7 @@ export default {
       portraitSrc: '',
       portraitModifyName: '',
       portraitModifySrc: '',
-      isLogin: true,
+      isLogin: false,
       userName: '',
       userId: '',
       drawerInformation: false,
@@ -158,29 +158,7 @@ export default {
     },
     // 同步状态，读取用户信息
     syncUser () {
-      // 获取基本信息
-      this.$axios.post('/api/findByCondition', {
-        name: this.userName
-      }).then(data => {
-        console.log('获取用户基本信息')
-        this.userInfor = data.data
-        // 更新头像
-        this.portraitSrc = require('@/assets/img/' + this.userInfor.infor_portrait)
-      })
-      // 获取粉丝数量
-      this.$axios.get('/api/getFansNumByCookie', {
-        name: this.userName
-      }).then(data => {
-        this.fansNum = data.data
-        console.log('获取粉丝数：' + this.fansNum)
-      })
-      // 获取关注数量
-      this.$axios.get('/api/getUserNumByCookie', {
-        name: this.userName
-      }).then(data => {
-        this.followNum = data.data
-        console.log('获取关注数：' + this.followNum)
-      })
+      this.portraitSrc = require('@/assets/img/portrait.png')
     },
     // 设置cookie
     setCookie (cname, cvalue, exdays) {
@@ -218,9 +196,9 @@ export default {
     this.getLoginState()
     if (this.isLogin) {
       this.syncUser()
+    } else {
+      this.portraitSrc = require('@/assets/img/blank.png')
     }
-    this.isLogin = true
-    this.portraitSrc = require('@/assets/img/portrait.png')
   }
 }
 </script>

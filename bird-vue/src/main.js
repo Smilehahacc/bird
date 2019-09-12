@@ -22,9 +22,10 @@ Vue.use(animate)
 Vue.prototype.$axios = Axios
 
 // 全局axios默认值，即域名配置，减少后面请求时url的代码量，可在此统一配置
-Axios.defaults.baseURL = 'http://localhost:8080'
+Axios.defaults.baseURL = 'http://127.0.0.1:8000'
 // 配置请求参数的默认数据结构（这边为json字符串形式）
 Axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+Axios.defaults.withCredentials = true
 
 // 添加请求拦截器（可以在请求发送前对部分参数进行处理）
 Axios.interceptors.request.use(function (config) {

@@ -8,7 +8,7 @@
         <p class='tilte-detail'>{{ loginTitle }}</p>
         <div id='inputDetail'>
           <input type="text"
-                 v-model="name"
+                 v-model="username"
                  class='input-style'
                  placeholder="请输入手机号或用户名" /><br />
           <input type="password"
@@ -89,7 +89,7 @@ export default {
       displayLogin: '',
       displayRegister: 'none',
       disabled: false,
-      name: '',
+      username: '',
       password: '',
       phone: '',
       code: '',
@@ -101,17 +101,17 @@ export default {
   methods: {
     // 登录请求发送
     login () {
-      if (this.name === '') {
+      if (this.username === '') {
         this.$Message.warning('请输入用户名或手机号！')
       } else if (this.password === '') {
         this.$Message.warning('请输入密码！')
       } else {
         // 将json对象转化为字符串直接拼接在url后面进行请求
         let postData = {
-          name: this.name,
+          username: this.username,
           password: this.password
         }
-        this.$axios.get('/api/login', {
+        this.$axios.get('/login', {
           params: {
             ...postData
           }
@@ -121,7 +121,7 @@ export default {
           // 成功则弹出提示，跳转页面
           if (response.data === 'SUCCESS') {
             this.$Message.success('登录成功！')
-            this.setCookie('userName', this.name, 7)
+            this.setCookie('userName', this.username, 7)
             this.getUserId()
             // this.$router.push('/forumCenter')
           } else {
@@ -135,8 +135,8 @@ export default {
     },
     getUserId () {
       this.$axios
-        .post('/api/findByCondition', {
-          name: this.name
+        .get('/findUser', {
+          username: this.username
         })
         .then(data => {
           console.log('获取用户基本信息------------------')
@@ -144,7 +144,6 @@ export default {
           this.userId = this.userInfor.user_id
           this.setCookie('userId', this.userId, 7)
           this.setCookie('userInfor', this.userInfor, 7)
-          console.log('获取用户id：' + this.userId)
         })
 
       setTimeout(() => {
@@ -152,9 +151,9 @@ export default {
         // 更新信息，跳转页面
         this.$store.state.isLogin = true
         this.$store.state.userId = this.userId
-        this.$store.state.userName = this.name
+        this.$store.state.userName = this.username
         this.setCookie('isLogin', 'true', 7)
-        this.$router.push('/homepage')
+        this.$router.push('/home')
       }, 500)
     },
     // 发送验证码

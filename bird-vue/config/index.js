@@ -12,14 +12,14 @@ module.exports = {
     assetsPublicPath: '/',
     // 配置反向代理，解决跨域请求
     proxyTable: {
-      '/api': {
-        // 目的地址，填写自己后端项目的地址
-        target: 'http://39.105.54.137:8080/xxx',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
-        }
-      }
+      // '/api': {
+      //   // 目的地址，填写自己后端项目的地址
+      //   target: 'http://127.0.0.1:8000',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/api': ''
+      //   }
+      // }
     },
 
     // Various Dev Server settings
