@@ -4,7 +4,8 @@
       <div class='login-main'
            v-bind:style='{display: displayLogin}'>
         <!-- <p class='title'>{{ appTitle }}</p> -->
-        <img :src="require('@/assets/img/logo_title.png')" class="title-logo">
+        <img :src="require('@/assets/img/logo_title.png')"
+             class="title-logo">
         <p class='tilte-detail'>{{ loginTitle }}</p>
         <div id='inputDetail'>
           <input type="text"
@@ -27,7 +28,8 @@
 
       <div class='register-main'
            v-bind:style='{display: displayRegister}'>
-        <img :src="require('@/assets/img/logo_title.png')" class="title-logo">
+        <img :src="require('@/assets/img/logo_title.png')"
+             class="title-logo">
         <p class='tilte-detail'>{{ registerTitle }}</p>
         <div id='inputDetail'>
           <input type="text"
@@ -67,7 +69,6 @@
     </div>
   </div>
 </template>
-
 <script>
 // 固定写法，参数的赋值
 export default {
@@ -164,16 +165,18 @@ export default {
       } else if (!reg.test(this.phone)) {
         this.$Message.warning('手机格式不正确！')
       } else {
-        this.$axios.post('/api/sendSms', {
-          phone: this.phone
+        this.$axios.get('/sendSms', {
+          params: {
+            phone: this.phone
+          }
         }).then(response => {
-          console.log(1)
-          console.log(response)
+          var result = response.data
           // 通过手机号验证则开始倒计时，若手机号已注册则弹出提示
-          if (response.data === 'SUCCESS') {
+          if (result !== 'ERROR') {
             this.$Message.success('验证码已发送，请注意查收！')
             this.time = 60
             this.disabled = true
+            this.setCookieMin(this.phone, result, 5)
             this.timer()
           } else {
             this.$Message.warning('手机号已注册，可直接登录！')
@@ -194,21 +197,32 @@ export default {
     },
     // 注册请求处理，验证码发送
     register () {
-      this.$axios.post('/api/registerByPhone', {
-        phone: this.phone,
-        code: this.code
-      }).then(response => {
-        console.log(1)
-        console.log(response)
-        if (response.data === 'SUCCESS') {
-          this.$Message.success('注册成功！')
-        } else {
-          this.$Message.warning('注册失败，请检查输入的验证码')
-        }
-      }).catch(error => {
-        console.log(error)
-        this.$Message.error('请求失败！' + error.status + ',' + error.statusText)
-      })
+      var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/
+      if (this.phone === '') {
+        this.$Message.error('请输入手机号码！')
+      } else if (!reg.test(this.phone)) {
+        this.$Message.warning('手机格式不正确！')
+      } else if (this.code === '') {
+        this.$Message.error('请输入验证码')
+      } else if (this.code === this.getCookie(this.phone)) {
+        this.$axios.get('/register', {
+          params: {
+            phone: this.phone,
+            code: this.code
+          }
+        }).then(response => {
+          if (response.data === 'SUCCESS') {
+            this.$Message.success('注册成功！')
+          } else {
+            this.$Message.warning('注册失败，手机号已被注册！')
+          }
+        }).catch(error => {
+          console.log(error)
+          this.$Message.error('请求失败！' + error.status + ',' + error.statusText)
+        })
+      } else {
+        this.$Message.warning('注册失败，请检查输入的验证码')
+      }
     },
     // 选择登陆或者注册，页面切换
     choice () {
@@ -233,6 +247,30 @@ export default {
       console.info(cname + '=' + cvalue + '; ' + expires)
       document.cookie = cname + '=' + cvalue + '; ' + expires
       console.info(document.cookie)
+    },
+    // 设置cookie
+    setCookieMin (cname, cvalue, min) {
+      var d = new Date()
+      d.setTime(d.getTime() + (min * 60 * 1000))
+      var expires = 'expires=' + d.toUTCString()
+      console.info(cname + '=' + cvalue + '; ' + expires)
+      document.cookie = cname + '=' + cvalue + '; ' + expires
+      console.info(document.cookie)
+    },
+    // 获取cookie
+    getCookie (cname) {
+      var name = cname + '='
+      var ca = document.cookie.split(';')
+      console.log('正在获取cookie...')
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i]
+        console.log(c)
+        while (c.charAt(0) === ' ') c = c.substring(1)
+        if (c.indexOf(name) !== -1) {
+          return c.substring(name.length, c.length)
+        }
+      }
+      return ''
     }
   },
   // 生命周期函数，打开页面后自动运行
@@ -243,7 +281,7 @@ export default {
 </script>
 
 <style scoped>
-*{
+* {
   margin: 0;
   padding: 0;
 }
