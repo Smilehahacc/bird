@@ -10,14 +10,14 @@
         </el-input>
       </div>
       <el-date-picker
-        style="width: 100%"
-        v-model="timevalue"
-        align="center"
-        value-format="yyyy-MM-dd"
-        type="daterange"
-        range-separator="——"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期">
+      style="width: 100%"
+      v-model="timevalue"
+      align="center"
+      value-format="yyyy-MM-dd"
+      type="daterange"
+      range-separator="——"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期">
       </el-date-picker>
       <div class="datasource">
         <el-table
