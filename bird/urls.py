@@ -22,5 +22,7 @@ urlpatterns = [
     url('admin/', admin.site.urls),
     # url(r'', TemplateView.as_view(template_name="index.html")),
     url(r'^login/$', views.login),
-    url(r'^findUser/$', views.findUser)
+    url(r'^findUser/$', views.findUser),
+    url(r'^sendSms/$', views.sendSms),
+    url(r'^register/$', views.register)
 ]

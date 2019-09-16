@@ -3,11 +3,12 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from .models import User, Img
 import json
-from django.views.decorators.csrf import csrf_exempt
-# views视图层，写上请求方法
+from .src.util import zhenzismsclient as smsclient
+import random
 
-# 用户登录
-@csrf_exempt
+'''
+**********登录页面的请求**********
+'''
 def login(request):
     if request.method == "GET":
         username = request.GET.get('username')
@@ -43,3 +44,84 @@ def findUser(request):
     except:
         print('请求失败，未查询到用户！')
         return HttpResponse("")
+
+# 发送短信验证码
+def sendSms(request):
+    if request.method == "GET":
+        phone = request.GET.get('phone')
+    if request.method == "POST":
+        phone = request.POST.get('phone')
+    # 设置验证码有效时间
+    # 确保手机号未被注册
+    if phone_check(phone):
+        code = sms_send(phone)
+        # response =HttpResponse('ok')
+        # response.set_cookie(phone, code, 60 * min)
+        # request.session[phone] = code
+        return HttpResponse(code)
+    return HttpResponse("ERROR")
+
+#号码检查
+def phone_check(phone):
+    try:
+        User.objects.get(user_name=phone)
+        return False
+    except:
+        return True
+        
+
+#调用接口，发送验证码
+def sms_send(phone):
+    code = code_get(6,False)
+    client = smsclient.ZhenziSmsClient("https://sms_developer.zhenzikj.com","101456", "d09395be-b8f0-4285-9bb4-1c41c1d5fe23")
+    result = client.send(phone, "您的验证码为:"+code+"，5分钟内输入有效，立即注册")
+    print("发送的结果为："+result+"验证码为："+code)
+    return code
+
+# 随机数生成验证码
+def code_get(n,alpha):
+    s = '' # 创建字符串变量,存储生成的验证码
+    for i in range(n):  # 通过for循环控制验证码位数
+        num = random.randint(0,9)  # 生成随机数字0-9
+        if alpha: # 需要字母验证码,不用传参,如果不需要字母的,关键字alpha=False
+            upper_alpha = chr(random.randint(65,90))
+            lower_alpha = chr(random.randint(97,122))
+            num = random.choice([num,upper_alpha,lower_alpha])
+        s = s + str(num)
+    return s
+
+# 通过手机号注册
+def register(request):
+    if request.method == "GET":
+        phone = request.GET.get('phone')
+        # code = request.GET.get('code')
+        # session_code = request.session.get(phone,'sb')
+        # print("now cookie is "+session_code)
+        # if session_code != code:
+        #     return HttpResponse("ERROR")
+    if phone_check(phone):
+        # 注册完毕，默认密码与手机号相同
+        user=User.objects.create_user(phone,phone)
+        user.save()
+        return HttpResponse("SUCCESS")  
+    return HttpResponse("ERROR")
+
+
+'''
+**********爬虫页面的请求**********
+'''
+
+
+'''
+**********图像标记页面的请求**********
+'''
+
+
+'''
+**********图像分类页面的请求**********
+'''
+
+
+'''
+**********算法评估页面的请求**********
+'''

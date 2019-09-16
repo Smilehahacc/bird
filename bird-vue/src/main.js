@@ -27,11 +27,21 @@ Axios.defaults.baseURL = 'http://127.0.0.1:8000'
 Axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 Axios.defaults.withCredentials = true
 
+let getCookie = (cookie) => {
+  let reg = /csrftoken=([\w]+)[;]?/g
+  return reg.exec(cookie)[1]
+}
+
 // 添加请求拦截器（可以在请求发送前对部分参数进行处理）
-Axios.interceptors.request.use(function (config) {
+Axios.interceptors.request.use((config) => {
   // 在发送请求之前做些什么
   if (config.method === 'post') {
     config.data = qs.stringify(config.data)
+  }
+  // 在post请求前统一添加X-CSRFToken的header信息
+  let cookie = document.cookie
+  if (cookie && config.method === 'post') {
+    config.headers['X-CSRFToken'] = getCookie(cookie)
   }
   return config
 }, function (error) {
@@ -55,6 +65,8 @@ new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
+  components: {
+    App
+  },
   template: '<App/>'
 })
