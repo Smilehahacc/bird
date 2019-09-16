@@ -2,7 +2,13 @@
 <template>
   <div id='app'>
     <el-card class="box-card">
-      <span class="demonstration">时 间 ：</span>
+      <div class="header">
+        <el-input
+          placeholder="请输入爬取内容"
+          suffix-icon="el-icon-search"
+          v-model="inputdata">
+        </el-input>
+      </div>
       <el-date-picker
         v-model="timevalue"
         align="center"
@@ -43,6 +49,7 @@ export default {
   data () {
     return {
       currentRow: null,
+      inputdata: '',
       timevalue: '',
       tableData: [{
         source: '百度'
@@ -65,12 +72,13 @@ export default {
   methods: {
     // 重置函数 重置时间和来源
     setCurrent (row) {
+      this.inputdata = ''
       this.timevalue = ''
       this.$refs.singleTable.setCurrentRow(row)
     },
     // 启动函数 给后台传值 暂时写成弹窗
     pushdata () {
-      console.log(123)
+      console.log(this.inputdata)
       console.log(this.timevalue)
       console.log(this.currentRow.source)
     },
@@ -85,5 +93,13 @@ export default {
 * {
   margin: 0;
   padding: 0;
+}
+.header {
+  width: 350px;
+  height: 50px;
+  margin: 0 auto;
+}
+.hinput {
+  float: left;
 }
 </style>
