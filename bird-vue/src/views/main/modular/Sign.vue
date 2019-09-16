@@ -3,7 +3,7 @@
   <div id="app">
     <div class="sign">
     <div class="Btton-title">
-      <el-button type="primary" class="titleButton" plain >刷新标注</el-button>
+      <el-button type="primary" class="titleButton" plain  @click='refresh'>刷新标注</el-button>
       <el-button type="primary" class="titleButton" plain >点击提交</el-button>
     </div>
     <div class="line"> </div>
@@ -32,7 +32,7 @@ export default {
       images: [
         {
           url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: '非鸟类'
+          sort: '鸟类'
         },
         {
           url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
@@ -84,7 +84,13 @@ export default {
     }
   },
   components: {},
-  methods: {}
+  methods: {
+    refresh () {
+      this.images.forEach(element => {
+        element.sort = ' '
+      })
+    }
+  }
 }
 </script>
 <style>
