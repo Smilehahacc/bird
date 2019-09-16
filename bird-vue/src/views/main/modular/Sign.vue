@@ -87,7 +87,7 @@ export default {
   methods: {
     refresh () {
       this.images.forEach(element => {
-        element.sort = ' '
+        element.sort = ''
       })
     }
   }
