@@ -4,12 +4,13 @@
     <el-card class="box-card">
       <div class="header">
         <el-input
-          placeholder="请输入爬取内容"
-          suffix-icon="el-icon-search"
-          v-model="inputdata">
+        placeholder="请输入爬取内容"
+        suffix-icon="el-icon-search"
+        v-model="inputdata">
         </el-input>
       </div>
       <el-date-picker
+        style="width: 100%"
         v-model="timevalue"
         align="center"
         value-format="yyyy-MM-dd"
@@ -95,11 +96,7 @@ export default {
   padding: 0;
 }
 .header {
-  width: 350px;
+  width: 100%;
   height: 50px;
-  margin: 0 auto;
-}
-.hinput {
-  float: left;
 }
 </style>
