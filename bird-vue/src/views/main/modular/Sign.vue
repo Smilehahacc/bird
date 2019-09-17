@@ -4,7 +4,7 @@
     <div class="sign">
     <div class="Btton-title">
       <el-button type="primary" class="titleButton" plain  @click='refresh'>刷新标注</el-button>
-      <el-button type="primary" class="titleButton" plain >点击提交</el-button>
+      <el-button type="primary" class="titleButton" plain @click="push">点击提交</el-button>
     </div>
     <div class="line"> </div>
       <div class="block" v-for="fit in images" :key="fit">
@@ -32,31 +32,31 @@ export default {
       images: [
         {
           url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: '鸟类'
+          sort: ''
         },
         {
           url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: '鸟类'
+          sort: ''
         },
         {
           url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: '鸟类'
+          sort: ''
         },
         {
           url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: '鸟类'
+          sort: ''
         },
         {
           url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: '鸟类'
+          sort: ''
         },
         {
           url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: '鸟类'
+          sort: ''
         },
         {
           url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: '鸟类'
+          sort: ''
         },
         {
           url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
@@ -72,12 +72,13 @@ export default {
         }
       ],
       options: [
+        // 标注图片 0是鸟类 1是其他种类
         {
-          value: '选项1',
+          value: '0',
           label: '鸟类'
         },
         {
-          value: '选项2',
+          value: '1',
           label: '其他种类'
         }
       ]
@@ -85,10 +86,24 @@ export default {
   },
   components: {},
   methods: {
+    // 清空所有标注函数
     refresh () {
       this.images.forEach(element => {
         element.sort = ''
       })
+    },
+    // 提交标注函数
+    push () {
+      console.log(this.images[0].sort)
+      console.log(this.images[1].sort)
+      console.log(this.images[2].sort)
+      console.log(this.images[3].sort)
+      console.log(this.images[4].sort)
+      console.log(this.images[5].sort)
+      console.log(this.images[6].sort)
+      console.log(this.images[7].sort)
+      console.log(this.images[8].sort)
+      console.log(this.images[9].sort)
     }
   }
 }
