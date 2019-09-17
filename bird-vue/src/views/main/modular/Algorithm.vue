@@ -1,5 +1,6 @@
 // 算法效率评估页面
 <template>
+<el-card class="box-card">
   <div id="app">
     算法评估
     <el-upload
@@ -20,6 +21,7 @@
     </el-table>
     </div>
   </div>
+</el-card>
 </template>
 
 <script>
@@ -85,7 +87,7 @@ export default {
 }
 .biaoge {
   position:absolute;
-  left:650px;
+  left:550px;
   top:450px;
 }
 </style>
