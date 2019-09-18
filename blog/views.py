@@ -6,6 +6,10 @@ import random
 from .src.util import zhenzismsclient as smsclient
 from blog.src.algorithm.Test import start_sort
 
+
+
+
+
 '''
 **********登录页面的请求**********
 '''
@@ -115,7 +119,54 @@ def register(request):
 '''
 **********图像标记页面的请求**********
 '''
+def getsign(request):
+    try:
+        img_list=[]
+        for i in Img.objects.filter(img_sign = -1):
+            dict = {'id':i.img_id,'url':i.img_url,'sort':i.img_sign}
+            img_list.append(dict)
+    except:
+        print('请求失败！')
+        return HttpResponse('ERROR')
+    if img_list:
+        data = {}
+        data["images"] = list(img_list)
+        print('哥哥好')
+        return JsonResponse(data,safe=False)
+    print('获取图片失败！')
+    return HttpResponse('ERROR')
 
+# @require_http_methods(["POST"])
+# @csrf_exempt
+# def pushsign(request):
+#     data = json.loads(request.body)
+#     print(data["images"])
+    
+#     return HttpResponse("Hello Label")
+
+def pushsign(request):
+    if request.method == "GET":
+        uploadList = request.GET
+        # imgList = json.loads(request.GET)
+        uploadList = uploadList+''
+        # print(request.GET.get('images[]'))
+        print(uploadList)
+    # for i in range(len(imgList)):
+    #     print(imgList[i]['url'])
+    try:
+        img_list=[]
+        for i in Img.objects.filter(img_sign = -1):
+            dict = {'id':i.img_id,'url':i.img_url,'sort':i.img_sign}
+            img_list.append(dict)
+    except:
+        print('请求失败！')
+        return HttpResponse('ERROR')
+    if img_list:
+        data = {}
+        data["images"] = list(img_list)
+        return JsonResponse(data,safe=False)
+    print('获取图片失败！')
+    return HttpResponse('ERROR')
 
 '''
 **********图像分类页面的请求**********

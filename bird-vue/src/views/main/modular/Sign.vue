@@ -4,7 +4,7 @@
     <div class="sign">
     <div class="Btton-title">
       <el-button type="primary" class="titleButton" plain  @click='refresh'>刷新标注</el-button>
-      <el-button type="primary" class="titleButton" plain @click="push">点击提交</el-button>
+      <el-button type="primary" class="titleButton" plain @click="pushimages">点击提交</el-button>
     </div>
     <div class="line"> </div>
       <div class="block" v-for="fit in images" :key="fit">
@@ -29,56 +29,57 @@ export default {
   name: 'sign',
   data () {
     return {
+      ceshi: 'admin',
       images: [
-        {
-          url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: ''
-        },
-        {
-          url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: ''
-        },
-        {
-          url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: ''
-        },
-        {
-          url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: ''
-        },
-        {
-          url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: ''
-        },
-        {
-          url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: ''
-        },
-        {
-          url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: ''
-        },
-        {
-          url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: ''
-        },
-        {
-          url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: ''
-        },
-        {
-          url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          sort: ''
-        }
+        // {
+        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        //   sort: ''
+        // },
+        // {
+        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        //   sort: ''
+        // },
+        // {
+        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        //   sort: ''
+        // },
+        // {
+        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        //   sort: ''
+        // },
+        // {
+        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        //   sort: ''
+        // },
+        // {
+        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        //   sort: ''
+        // },
+        // {
+        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        //   sort: ''
+        // },
+        // {
+        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        //   sort: ''
+        // },
+        // {
+        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        //   sort: ''
+        // },
+        // {
+        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        //   sort: ''
+        // }
       ],
       options: [
         // 标注图片 0是鸟类 1是其他种类
         {
-          value: '0',
+          value: '1',
           label: '鸟类'
         },
         {
-          value: '1',
+          value: '0',
           label: '其他种类'
         }
       ]
@@ -92,19 +93,49 @@ export default {
         element.sort = ''
       })
     },
+    // 获取标注图片函数
+    pullimages () {
+      let postData = {
+        ceshi: this.ceshi
+      }
+      this.$axios.get('/getsign', {
+        params: {
+          ...postData
+        }
+      }).then(response => {
+        console.log(response)
+        response.data.images.forEach(element => {
+          element.sort = ''
+        },
+        this.images = response.data.images
+        )
+      }).catch(error => {
+        console.log(error)
+        this.$Message.error('请求失败！' + error.status + ',' + error.statusText)
+      })
+    },
     // 提交标注函数
-    push () {
-      console.log(this.images[0].sort)
-      console.log(this.images[1].sort)
-      console.log(this.images[2].sort)
-      console.log(this.images[3].sort)
-      console.log(this.images[4].sort)
-      console.log(this.images[5].sort)
-      console.log(this.images[6].sort)
-      console.log(this.images[7].sort)
-      console.log(this.images[8].sort)
-      console.log(this.images[9].sort)
+    pushimages () {
+      let postData = {
+        images: this.images
+        // ceshi: this.ceshi
+      }
+      console.log(postData)
+      this.$axios.get('/pushsign', {
+        params: {
+          ...postData
+        }
+      }).then(response => {
+        console.log(response)
+      }).catch(error => {
+        console.log(error)
+        this.$Message.error('请求失败！' + error.status + ',' + error.statusText)
+      })
     }
+  },
+  // 生命周期函数，打开页面后自动运行
+  created () {
+    this.pullimages()
   }
 }
 </script>

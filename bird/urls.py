@@ -25,5 +25,8 @@ urlpatterns = [
     # url(r'^findUser/$', views.findUser),
     # url(r'^sendSms/$', views.sendSms),
     # url(r'^register/$', views.register),
-    url(r'^imgSort/$', views.imgSort)
+    url(r'^imgSort/$', views.imgSort),
+    url(r'^getsign/$', views.getsign),
+    url(r'^pushsign/$', views.pushsign)
+    
 ]
