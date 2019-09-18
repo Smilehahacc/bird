@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from .models import User, Img
 import json
+import os
 import random
 from .src.util import zhenzismsclient as smsclient
 from blog.src.algorithm.Test import start_sort
@@ -121,6 +122,7 @@ def getsearch(request):
     print(data)
     print(time)
     print(source)
+    os.system("python D:\\学习\\大四上\\学习\\课设\\bird\\blog\\reptile.py") # 调用爬虫文件
     if data:
         return HttpResponse('SUCCESS')
     HttpResponse('ERROR')
