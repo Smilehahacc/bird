@@ -36,8 +36,8 @@
           </el-table-column>
         </el-table>
         <div style="margin-top: 20px">
-          <el-button @click="pushdata()">启动</el-button>
-          <el-button @click="setCurrent()">重置</el-button>
+          <el-button @click="search()">启动</el-button>
+          <el-button @click="reflush()">重置</el-button>
         </div>
       </div>
     </el-card>
@@ -72,15 +72,35 @@ export default {
   },
   methods: {
     // 重置函数 重置时间和来源
-    setCurrent (row) {
+    reflush (row) {
       this.inputdata = ''
       this.timevalue = ''
       this.$refs.singleTable.setCurrentRow(row)
     },
     // 启动函数 给后台传值 暂时写成弹窗
-    pushdata () {
-      console.log(this.inputdata)
-      console.log(this.timevalue)
+    search () {
+      if (this.inputdata === '') {
+        this.$Message.warning('请输入爬取内容！')
+      } else if (this.timevalue === '') {
+        this.$Message.warning('请输入时间！')
+      } else {
+        let postData = {
+          inputdata: this.inputdata,
+          timevalue: this.timevalue,
+          source: this.currentRow.source
+        }
+        this.$axios.get('/search', {
+          params: {
+            ...postData
+          }
+        }).then(response => {
+          console.log(1)
+          console.log(response)
+        }).catch(error => {
+          console.log(error)
+          this.$Message.error('请求失败！' + error.status + ',' + error.statusText)
+        })
+      }
       console.log(this.currentRow.source)
     },
     // 点击时期选择器后存值

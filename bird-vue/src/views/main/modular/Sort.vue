@@ -6,36 +6,46 @@
       <p>请上传需要进行识别的图片</p>
     </div>
     <!-- 上传图像控件 -->
-    <div class="sort-img"
-         v-if="!isStart" v-loading="loading">
-      <el-upload action="https://jsonplaceholder.typicode.com/posts/"
-                 ref="uploadedImg"
-                 list-type="picture-card"
-                 :on-preview="handlePictureCardPreview"
-                 :on-remove="handleRemove"
-                 :on-error="uploadError"
-                 :on-exceed="uploadExceed"
-                 :limit="maxImg"
-                 :on-success="uploadSuccess">
-        <i class="el-icon-plus"></i>
-      </el-upload>
-      <el-dialog :visible.sync="dialogVisible">
-        <img width="100%"
-             :src="dialogImageUrl"
-             alt="">
-      </el-dialog>
-    </div>
-    <!-- 展示识别结果 -->
-    <div class="sort-show"
-         v-if="isStart" v-loading="loading">
-      <div style="width: 190px; height: 180px;float: left;margin: 0 0 12px 20px;"
-           v-for="fit in uploadList"
-           :key="fit">
-        <el-image style="width: 180px;height: 150px; margin:5px 10px;"
-                  :src="require('@/assets/test/'+fit.url)"></el-image><br>
-        <span style="font-size: 18px">{{ fit.sort }}</span>
+    <transition enter-active-class="animated fadeInRight">
+      <div class="sort-img"
+           v-if="!isStart"
+           v-loading="loading">
+        <el-upload action="https://jsonplaceholder.typicode.com/posts/"
+                   ref="uploadedImg"
+                   list-type="picture-card"
+                   :on-preview="handlePictureCardPreview"
+                   :on-remove="handleRemove"
+                   :on-error="uploadError"
+                   :on-exceed="uploadExceed"
+                   :limit="maxImg"
+                   :on-success="uploadSuccess">
+          <i class="el-icon-plus"></i>
+        </el-upload>
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%"
+               :src="dialogImageUrl"
+               alt="">
+        </el-dialog>
       </div>
-    </div>
+    </transition>
+
+    <!-- 展示识别结果 -->
+    <transition enter-active-class="animated fadeInRight">
+      <div class="sort-show"
+           v-if="isStart"
+           v-loading="loading">
+
+        <div style="width: 190px; height: 180px;float: left;margin: 0 0 12px 20px;"
+             v-for="fit in uploadList"
+             :key="fit">
+          <el-image style="width: 180px;height: 150px; margin:5px 10px;"
+                    :src="require('@/assets/test/'+fit.url)"></el-image><br>
+          <span style="font-size: 18px">{{ fit.sort }}</span>
+        </div>
+
+      </div>
+    </transition>
+
     <div class="operation"
          v-if="!isStart">
       <el-button @click="clear">重新选择</el-button>
@@ -118,13 +128,14 @@ export default {
         if (response.data !== 'ERROR') {
           this.uploadList = response.data
           this.isStart = true
-          this.loading = false
         } else {
-          this.$Message.error('上传图像失败！')
+          this.$Message.error('识别失败！')
         }
+        this.loading = false
       }).catch(error => {
         console.log(error)
         this.$Message.error('请求失败！' + error.status + ',' + error.statusText)
+        this.loading = false
       })
     }
   }
