@@ -2,7 +2,8 @@
 <template>
 <el-card class="box-card">
   <div id="app">
-    算法评估
+    <h1>算法评估</h1>
+    <br>
     <el-upload
       class="avatar-uploader"
       action="https://jsonplaceholder.typicode.com/posts/"
@@ -87,7 +88,7 @@ export default {
 }
 .biaoge {
   position:absolute;
-  left:550px;
-  top:450px;
+  left:650px;
+  top:520px;
 }
 </style>
