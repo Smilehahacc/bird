@@ -4,6 +4,8 @@ from .models import User, Img
 import json
 import os
 import random
+import re
+import requests
 from .src.util import zhenzismsclient as smsclient
 from blog.src.algorithm.Test import start_sort
 
@@ -122,11 +124,37 @@ def getsearch(request):
     print(data)
     print(time)
     print(source)
-    os.system("python D:\\学习\\大四上\\学习\\课设\\bird\\blog\\reptile.py") # 调用爬虫文件
+    word = data
+    url = 'http://image.baidu.com/search/flip?tn=baiduimage&ie=utf-8&word=' + word + '&ct=201326592&v=flip'
+    result = requests.get(url)
+    dowmloadPic(result.text, word)
     if data:
         return HttpResponse('SUCCESS')
     HttpResponse('ERROR')
 
+def dowmloadPic(html, keyword):
+    pic_url = re.findall('"objURL":"(.*?)",', html, re.S)
+    i = 1
+    print('找到关键词:' + keyword + '的图片，现在开始下载图片...')
+    for each in pic_url:
+        print('正在下载第' + str(i) + '张图片，图片地址:' + str(each))
+        try:
+            pic = requests.get(each, timeout=10)
+        except requests.exceptions.ConnectionError:
+            print('【错误】当前图片无法下载')
+            continue
+
+        # dir = keyword + '_' + str(i) + '.jpg'
+        dir =  '../bird/blog/images/' + keyword + '_' + str(i) + '.jpg'
+        fp = open(dir, 'wb')
+        fp.write(pic.content)
+        fp.close()
+        data = open(r"../bird/blog/address.txt","a+")
+        txt = str(i) + '  ' +str(each)
+        data.write(txt)
+        data.write('\r\n')
+        data.close()
+        i += 1
 
 '''
 **********图像标记页面的请求**********
