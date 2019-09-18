@@ -27,6 +27,7 @@ urlpatterns = [
     # url(r'^register/$', views.register),
     url(r'^imgSort/$', views.imgSort),
     url(r'^getsign/$', views.getsign),
-    url(r'^pushsign/$', views.pushsign)
+    url(r'^pushsign/$', views.pushsign),
+    url(r'^getsearch/$', views.getsearch)
     
 ]

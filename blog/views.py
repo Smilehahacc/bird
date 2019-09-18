@@ -114,6 +114,16 @@ def register(request):
 '''
 **********爬虫页面的请求**********
 '''
+def getsearch(request):
+    data = request.GET.get('inputdata')
+    time = request.GET.get('timevalue') # 获取不到时间值
+    source = request.GET.get('source')
+    print(data)
+    print(time)
+    print(source)
+    if data:
+        return HttpResponse('SUCCESS')
+    HttpResponse('ERROR')
 
 
 '''
