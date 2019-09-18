@@ -79,7 +79,7 @@ export default {
     },
     // 启动函数 给后台传值 暂时写成弹窗
     search () {
-       if (this.inputdata == '') {
+      if (this.inputdata === '') {
         this.$Message.warning('请输入爬取内容！')
       } else if (this.timevalue === '') {
         this.$Message.warning('请输入时间！')
