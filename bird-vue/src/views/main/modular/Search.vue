@@ -94,6 +94,7 @@ export default {
             ...postData
           }
         }).then(response => {
+          this.$Message.success('爬取成功，默认爬取60张图片！')
           console.log(response)
         }).catch(error => {
           console.log(error)
