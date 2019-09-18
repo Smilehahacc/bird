@@ -4,7 +4,10 @@ from .models import User, Img
 import json
 import random
 from .src.util import zhenzismsclient as smsclient
-from blog.src.algorithm.Test import start_sort
+from blog.src.algorithm.HandCode_Test.Test import start_sort
+from blog.src.algorithm.SVM_KNN_BP.Test import get_knn
+from blog.src.algorithm.SVM_KNN_BP.Test import get_bp
+from blog.src.algorithm.SVM_KNN_BP.Test import get_svm
 
 '''
 **********登录页面的请求**********
@@ -145,3 +148,34 @@ def getResult(result):
 '''
 **********算法评估页面的请求**********
 '''
+def getKnn(request):
+    if request.method == "GET":
+        kValue = request.GET.get('kValue')
+    try:
+        print("正在计算KNN算法准确率...")
+        rate = "%.2f%%" % (get_knn(int(kValue)) * 100)
+        return HttpResponse(rate)
+    except Exception as e:
+        print("KNN算法准确率计算失败！错误信息为："+str(e))
+        return HttpResponse("ERROR")
+
+def getBp(request):
+    if request.method == "GET":
+        learningRate = request.GET.get('learningRate')
+        epochs = request.GET.get('epochs')
+    try:
+        print("正在计算BP算法准确率...")
+        rate = "%.2f%%" % (get_bp(float(learningRate),int(epochs)) * 100)
+        return HttpResponse(rate)
+    except Exception as e:
+        print("BP算法准确率计算失败！错误信息为："+str(e))
+        return HttpResponse("ERROR")
+
+def getSvm(request):
+    try:
+        print("正在计算SVM算法准确率...")
+        rate = "%.2f%%" % (get_svm() * 100)
+        return HttpResponse(rate)
+    except Exception as e:
+        print("SVM算法准确率计算失败！错误信息为："+str(e))
+        return HttpResponse("ERROR")
