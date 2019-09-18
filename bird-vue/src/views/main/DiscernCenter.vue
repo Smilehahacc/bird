@@ -30,7 +30,7 @@ export default {
   name: 'discernCenter',
   data () {
     return {
-      isCollapse: true,
+      isCollapse: false,
       navList: [
         { name: '/search', navItem: '数据爬虫', icon: 'el-icon-s-opportunity' },
         { name: '/sign', navItem: '图像标记', icon: 'el-icon-edit-outline' },
@@ -64,8 +64,8 @@ export default {
   },
   created () {
     setTimeout(() => {
-      this.isCollapse = false
-    }, 60)
+      this.isCollapse = true
+    }, 600)
   }
 }
 </script>

@@ -131,7 +131,8 @@ def imgSort(request):
             imgList[i]['sort'] = getResult(start_sort(imgList[i]['url']))
         print("全部识别完毕！")
         return HttpResponse(json.dumps(imgList), content_type='application/json')
-    except:
+    except Exception as e:
+        print("图像识别失败！错误信息为："+str(e))
         return HttpResponse("ERROR")
 
 
