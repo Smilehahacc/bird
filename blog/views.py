@@ -1,10 +1,10 @@
-from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
 from .models import User, Img
 import json
-from .src.util import zhenzismsclient as smsclient
 import random
+from .src.util import zhenzismsclient as smsclient
+from blog.src.algorithm.Test import start_sort
 
 '''
 **********登录页面的请求**********
@@ -68,7 +68,7 @@ def phone_check(phone):
         return False
     except:
         return True
-        
+
 
 #调用接口，发送验证码
 def sms_send(phone):
@@ -103,7 +103,7 @@ def register(request):
         # 注册完毕，默认密码与手机号相同
         user=User.objects.create_user(phone,phone)
         user.save()
-        return HttpResponse("SUCCESS")  
+        return HttpResponse("SUCCESS")
     return HttpResponse("ERROR")
 
 
@@ -120,8 +120,27 @@ def register(request):
 '''
 **********图像分类页面的请求**********
 '''
+# 将前端接收的图片地址输入分类算法中
+def imgSort(request):
+    if request.method == "GET":
+        uploadList = request.GET.get('uploadList')
+    imgList = json.loads(uploadList)
+    try:
+        for i in range(len(imgList)):
+            print("正在识别第" + str(i + 1) + "张图像(" + imgList[i]['url'] + ")...")
+            imgList[i]['sort'] = getResult(start_sort(imgList[i]['url']))
+        print("全部识别完毕！")
+        return HttpResponse(json.dumps(imgList), content_type='application/json')
+    except:
+        return HttpResponse("ERROR")
 
 
+# 提取分类算法回传结果
+def getResult(result):
+    if(result[8:9]=='0'):
+        return "非鸟类"
+    else:
+        return "鸟类"
 '''
 **********算法评估页面的请求**********
 '''

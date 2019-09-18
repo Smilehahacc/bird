@@ -7,7 +7,7 @@
     </div>
     <!-- 上传图像控件 -->
     <div class="sort-img"
-         v-if="!isStart">
+         v-if="!isStart" v-loading="loading">
       <el-upload action="https://jsonplaceholder.typicode.com/posts/"
                  ref="uploadedImg"
                  list-type="picture-card"
@@ -27,15 +27,13 @@
     </div>
     <!-- 展示识别结果 -->
     <div class="sort-show"
-         v-if="isStart">
-      <div class="block"
+         v-if="isStart" v-loading="loading">
+      <div style="width: 190px; height: 180px;float: left;margin: 0 0 12px 20px;"
            v-for="fit in uploadList"
            :key="fit">
-        <!-- <span class="demonstration">{{ fit }}</span> -->
-        <el-image style="width: 100px; height: 100px"
-                  :src="fit.url"
-                  :fit="fit"></el-image>
-                  <p>{{ fit.url }}</p>
+        <el-image style="width: 180px;height: 150px; margin:5px 10px;"
+                  :src="require('@/assets/test/'+fit.url)"></el-image><br>
+        <span style="font-size: 18px">{{ fit.sort }}</span>
       </div>
     </div>
     <div class="operation"
@@ -60,7 +58,8 @@ export default {
       dialogVisible: false,
       isStart: false,
       uploadList: [],
-      fits: ['fill', 'contain', 'cover', 'none', 'scale-down']
+      fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
+      loading: false
     }
   },
   components: {
@@ -87,19 +86,46 @@ export default {
     // 清空重新选择图片
     clear () {
       this.$message.success('列表清空成功，请重新选择需要上传的图片')
+      this.uploadList = []
       this.$refs.uploadedImg.clearFiles()
     },
+    // 重新选择，情况刚才已上传的图像列表
     reStart () {
       this.isStart = false
       this.$message.success('重新选择想要识别的图像吧！')
+      this.uploadList = []
       this.$refs.uploadedImg.clearFiles()
     },
     uploadSuccess (response, file, fileList) {
-      this.uploadList = fileList
+      this.uploadList.push({
+        url: file.name,
+        sort: '暂无分类'
+      })
     },
     // 开始识别图像
     start () {
-      this.isStart = true
+      if (this.uploadList.length === 0) {
+        this.$Message.warning('至少上传一张图片哦～')
+        return
+      }
+      this.$Message.success('正在识别...')
+      this.loading = true
+      this.$axios.get('/imgSort', {
+        params: {
+          uploadList: JSON.stringify(this.uploadList)
+        }
+      }).then(response => {
+        if (response.data !== 'ERROR') {
+          this.uploadList = response.data
+          this.isStart = true
+          this.loading = false
+        } else {
+          this.$Message.error('上传图像失败！')
+        }
+      }).catch(error => {
+        console.log(error)
+        this.$Message.error('请求失败！' + error.status + ',' + error.statusText)
+      })
     }
   }
 }
@@ -132,7 +158,7 @@ export default {
 .sort-show {
   /* width: 1150px; */
   width: 1310px;
-  min-height: 320px;
+  min-height: 420px;
   margin: 0 auto;
   padding: 30px 10px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
