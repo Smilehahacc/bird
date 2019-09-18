@@ -2,12 +2,19 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from .models import User, Img
 import json
+import os
 import random
+import re
+import requests
 from .src.util import zhenzismsclient as smsclient
 from blog.src.algorithm.HandCode_Test.Test import start_sort
 from blog.src.algorithm.SVM_KNN_BP.Test import get_knn
 from blog.src.algorithm.SVM_KNN_BP.Test import get_bp
 from blog.src.algorithm.SVM_KNN_BP.Test import get_svm
+
+
+
+
 
 '''
 **********登录页面的请求**********
@@ -113,12 +120,78 @@ def register(request):
 '''
 **********爬虫页面的请求**********
 '''
+def getsearch(request):
+    data = request.GET.get('inputdata')
+    time = request.GET.get('timevalue') # 获取不到时间值
+    source = request.GET.get('source')
+    print(data)
+    print(time)
+    print(source)
+    word = data
+    url = 'http://image.baidu.com/search/flip?tn=baiduimage&ie=utf-8&word=' + word + '&ct=201326592&v=flip'
+    result = requests.get(url)
+    dowmloadPic(result.text, word)
+    if data:
+        return HttpResponse('SUCCESS')
+    HttpResponse('ERROR')
 
+def dowmloadPic(html, keyword):
+    pic_url = re.findall('"objURL":"(.*?)",', html, re.S)
+    i = 1
+    print('找到关键词:' + keyword + '的图片，现在开始下载图片...')
+    for each in pic_url:
+        print('正在下载第' + str(i) + '张图片，图片地址:' + str(each))
+        try:
+            pic = requests.get(each, timeout=10)
+        except requests.exceptions.ConnectionError:
+            print('【错误】当前图片无法下载')
+            continue
+
+        # dir = keyword + '_' + str(i) + '.jpg'
+        dir =  '../bird/blog/images/' + keyword + '_' + str(i) + '.jpg'
+        fp = open(dir, 'wb')
+        fp.write(pic.content)
+        fp.close()
+        data = open(r"../bird/blog/address.txt","a+")
+        txt = str(i) + '  ' +str(each)
+        data.write(txt)
+        data.write('\r\n')
+        data.close()
+        i += 1
 
 '''
 **********图像标记页面的请求**********
 '''
+def getsign(request):
+    try:
+        img_list=[]
+        for i in Img.objects.filter(img_sign = -1):
+            dict = {'id':i.img_id,'url':i.img_url,'sort':i.img_sign}
+            img_list.append(dict)
+    except:
+        print('请求失败！')
+        return HttpResponse('ERROR')
+    if img_list:
+        data = {}
+        data["images"] = list(img_list)
+        return JsonResponse(data,safe=False)
+    print('获取图片失败！')
+    return HttpResponse('ERROR')
 
+
+def pushsign(request):
+    if request.method == "GET":
+        uploadList = request.GET.get('images')
+        imgList = json.loads(uploadList)
+    try:
+        for i in range(len(imgList)):
+            index = imgList[i]['id']
+            sort = imgList[i]['sort']
+            Img.objects.filter(img_id=index).update(img_sign=sort)
+    except:
+        print('请求失败！')
+        return HttpResponse('ERROR')
+    return HttpResponse('SUCCESS')
 
 '''
 **********图像分类页面的请求**********

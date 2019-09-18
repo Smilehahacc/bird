@@ -36,7 +36,7 @@
           </el-table-column>
         </el-table>
         <div style="margin-top: 20px">
-          <el-button @click="search()">启动</el-button>
+          <el-button @click="getsearch()">启动</el-button>
           <el-button @click="reflush()">重置</el-button>
         </div>
       </div>
@@ -78,7 +78,7 @@ export default {
       this.$refs.singleTable.setCurrentRow(row)
     },
     // 启动函数 给后台传值 暂时写成弹窗
-    search () {
+    getsearch () {
       if (this.inputdata === '') {
         this.$Message.warning('请输入爬取内容！')
       } else if (this.timevalue === '') {
@@ -89,19 +89,19 @@ export default {
           timevalue: this.timevalue,
           source: this.currentRow.source
         }
-        this.$axios.get('/search', {
+        this.$axios.get('/getsearch', {
           params: {
             ...postData
           }
         }).then(response => {
-          console.log(1)
+          this.$Message.success('爬取成功，默认爬取60张图片！')
           console.log(response)
         }).catch(error => {
           console.log(error)
           this.$Message.error('请求失败！' + error.status + ',' + error.statusText)
         })
       }
-      console.log(this.currentRow.source)
+      console.log(this.timevalue)
     },
     // 点击时期选择器后存值
     handleCurrentChange (val) {

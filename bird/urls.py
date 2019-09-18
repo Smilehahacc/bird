@@ -28,5 +28,9 @@ urlpatterns = [
     url(r'^imgSort/$', views.imgSort),
     url(r'^getKnn/$', views.getKnn),
     url(r'^getBp/$', views.getBp),
-    url(r'^getSvm/$', views.getSvm)
+    url(r'^getSvm/$', views.getSvm),
+    url(r'^imgSort/$', views.imgSort),
+    url(r'^getsign/$', views.getsign),
+    url(r'^pushsign/$', views.pushsign),
+    url(r'^getsearch/$', views.getsearch)
 ]
