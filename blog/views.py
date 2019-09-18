@@ -131,42 +131,24 @@ def getsign(request):
     if img_list:
         data = {}
         data["images"] = list(img_list)
-        print('哥哥好')
         return JsonResponse(data,safe=False)
     print('获取图片失败！')
     return HttpResponse('ERROR')
 
-# @require_http_methods(["POST"])
-# @csrf_exempt
-# def pushsign(request):
-#     data = json.loads(request.body)
-#     print(data["images"])
-    
-#     return HttpResponse("Hello Label")
 
 def pushsign(request):
     if request.method == "GET":
-        uploadList = request.GET
-        # imgList = json.loads(request.GET)
-        uploadList = uploadList+''
-        # print(request.GET.get('images[]'))
-        print(uploadList)
-    # for i in range(len(imgList)):
-    #     print(imgList[i]['url'])
+        uploadList = request.GET.get('images')
+        imgList = json.loads(uploadList)
     try:
-        img_list=[]
-        for i in Img.objects.filter(img_sign = -1):
-            dict = {'id':i.img_id,'url':i.img_url,'sort':i.img_sign}
-            img_list.append(dict)
+        for i in range(len(imgList)):
+            index = imgList[i]['id']
+            sort = imgList[i]['sort']
+            Img.objects.filter(img_id=index).update(img_sign=sort)
     except:
         print('请求失败！')
         return HttpResponse('ERROR')
-    if img_list:
-        data = {}
-        data["images"] = list(img_list)
-        return JsonResponse(data,safe=False)
-    print('获取图片失败！')
-    return HttpResponse('ERROR')
+    return HttpResponse('SUCCESS')
 
 '''
 **********图像分类页面的请求**********

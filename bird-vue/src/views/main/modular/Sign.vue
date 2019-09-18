@@ -30,48 +30,7 @@ export default {
   data () {
     return {
       ceshi: 'admin',
-      images: [
-        // {
-        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        //   sort: ''
-        // },
-        // {
-        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        //   sort: ''
-        // },
-        // {
-        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        //   sort: ''
-        // },
-        // {
-        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        //   sort: ''
-        // },
-        // {
-        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        //   sort: ''
-        // },
-        // {
-        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        //   sort: ''
-        // },
-        // {
-        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        //   sort: ''
-        // },
-        // {
-        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        //   sort: ''
-        // },
-        // {
-        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        //   sort: ''
-        // },
-        // {
-        //   url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        //   sort: ''
-        // }
-      ],
+      images: [],
       options: [
         // 标注图片 0是鸟类 1是其他种类
         {
@@ -117,7 +76,8 @@ export default {
     // 提交标注函数
     pushimages () {
       let postData = {
-        images: this.images
+        // images: this.images
+        images: JSON.stringify(this.images)
         // ceshi: this.ceshi
       }
       console.log(postData)
