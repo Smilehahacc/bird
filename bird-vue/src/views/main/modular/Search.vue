@@ -37,7 +37,7 @@
         </el-table>
         <div style="margin-top: 20px">
           <el-button @click="search()">启动</el-button>
-          <el-button @click="setCurrent()">重置</el-button>
+          <el-button @click="reflush()">重置</el-button>
         </div>
       </div>
     </el-card>
@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     // 重置函数 重置时间和来源
-    setCurrent (row) {
+    reflush (row) {
       this.inputdata = ''
       this.timevalue = ''
       this.$refs.singleTable.setCurrentRow(row)
