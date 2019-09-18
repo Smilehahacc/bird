@@ -1,7 +1,9 @@
 // 算法效率评估页面
 <template>
+<el-card class="box-card">
   <div id="app">
-    算法评估
+    <h1>算法评估</h1>
+    <br>
     <el-upload
       class="avatar-uploader"
       action="https://jsonplaceholder.typicode.com/posts/"
@@ -20,6 +22,7 @@
     </el-table>
     </div>
   </div>
+</el-card>
 </template>
 
 <script>
@@ -86,6 +89,6 @@ export default {
 .biaoge {
   position:absolute;
   left:650px;
-  top:450px;
+  top:520px;
 }
 </style>
