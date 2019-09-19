@@ -132,7 +132,8 @@ def getsearch(request):
         return HttpResponse('SUCCESS')
     HttpResponse('ERROR')
 
-def dowmloadPic(html, keyword):
+def dowmloadPic(html, keyword):1
+    # 百度图片爬虫
     pic_url = re.findall('"objURL":"(.*?)",', html, re.S)
     i = 1
     print('找到关键词:' + keyword + '的图片，现在开始下载图片...')
