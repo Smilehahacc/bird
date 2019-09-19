@@ -33,4 +33,5 @@ urlpatterns = [
     url(r'^getsign/$', views.getsign),
     url(r'^pushsign/$', views.pushsign),
     url(r'^getsearch/$', views.getsearch)
+    
 ]

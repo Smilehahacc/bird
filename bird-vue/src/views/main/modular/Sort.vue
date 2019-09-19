@@ -173,4 +173,5 @@ export default {
 .operation {
   margin-top: 30px;
 }
+
 </style>

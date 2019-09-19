@@ -12,10 +12,6 @@ from blog.src.algorithm.SVM_KNN_BP.Test import get_knn
 from blog.src.algorithm.SVM_KNN_BP.Test import get_bp
 from blog.src.algorithm.SVM_KNN_BP.Test import get_svm
 
-
-
-
-
 '''
 **********登录页面的请求**********
 '''
@@ -38,7 +34,6 @@ def login(request):
             return HttpResponse('SUCCESS')
     print('密码错误！')
     return HttpResponse('ERROR')
-
 
 # 通过用户名查找用户（用户登录后的用户信息获取）
 def findUser(request):
