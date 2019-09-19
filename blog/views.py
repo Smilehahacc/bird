@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.http import JsonResponse
+from urllib.request import urlretrieve
 from .models import User, Img
 import json
 import os
@@ -132,6 +133,14 @@ def getsearch(request):
         dowmloadPic(result.text, word)
     if source == '搜狗':
         getSogoulmag(data,60,'../bird/blog/images/')
+    if source == '360':
+        key_q = data
+        ps = 81
+        sn = 88
+        for i in range(0,1):  # 爬取多少图片 1页60张
+            key_ps = ps+i*60
+            key_sn = sn+i*60
+            image_spider(key_q, key_ps, key_sn)
     if data:
         return HttpResponse('SUCCESS')
     HttpResponse('ERROR')
@@ -192,6 +201,51 @@ def getSogoulmag(category,length,path):
         urllib.request.urlretrieve(img,path+cate+'_'+str(m)+'.jpg')
         m=m+1
     print('Complete!')
+
+def image_spider(key_q, key_ps, key_sn):  
+    # 360爬虫
+    url = "http://image.so.com/j?q=nba&src=srp&correct=nba&pn=60&ch=&sn=208&ps=201&pc=60&pd=1&prevsn=148" \
+          "&sid=39b8dabeae51031efce5a8d8b1fc6957&ran=0&ras=6&cn=0&gn=0&kn=8&comm=1"
+    headers = {
+        'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                      "(KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36",
+        'Referer': "http://image.so.com/i?q=nba&src=srp"
+    }
+    params = {
+        'q': key_q,
+        'src': 'srp',
+        'pn': '60',
+        'ch': '',
+        'sn': key_sn,
+        'ps': key_ps,
+        'pc': '60',
+        'pd': '1',
+        'prevsn': '0',
+        'sid': 'd34ad660320d853f00ea2d476ba2eaa5',
+        'ran': '0',
+        'ras': '6',
+        'cn': '0',
+        'gn': '0',
+        'kn': '8',
+        'comm': '1'
+    }
+
+    response = requests.get(url, headers=headers, params=params).json()  # 转json
+    lists = response.get('list')  # 提取list件，值为一个列表
+    i = 1
+
+    for lis in lists:
+        # 遍历列表，提取其中img字符串（图片url)
+        txt = str(key_q) + '_' + str(i)
+        path = '../bird/blog/images/%s.jpg' % str(txt)  # 图片地址
+        urlretrieve(lis.get('img'), path)  # 保存图片
+        data = open(r"../bird/blog/address.txt","a+")
+        num = str(i) + '  ' + str(lis.get('img'))
+        data.write(num)
+        data.write('\r\n')
+        data.close()
+        print(txt,lis.get('img'))
+        i+=1
 
 '''
 **********图像标记页面的请求**********
