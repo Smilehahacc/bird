@@ -34,7 +34,6 @@
       <div class="sort-show"
            v-if="isStart"
            v-loading="loading">
-
         <div style="width: 190px; height: 180px;float: left;margin: 0 0 12px 20px;"
              v-for="fit in uploadList"
              :key="fit">
@@ -153,10 +152,6 @@ export default {
   margin-top: 0px;
 }
 
-.sort-title h1 {
-  margin: 10px 0px;
-}
-
 .sort-title p {
   width: 100%;
   line-height: 100%;
@@ -176,6 +171,7 @@ export default {
 }
 
 .operation {
-  margin: 30px;
+  margin-top: 30px;
 }
+
 </style>
