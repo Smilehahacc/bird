@@ -6,6 +6,7 @@ import os
 import random
 import re
 import requests
+import urllib
 from .src.util import zhenzismsclient as smsclient
 from blog.src.algorithm.Test import start_sort
 
@@ -127,7 +128,10 @@ def getsearch(request):
     word = data
     url = 'http://image.baidu.com/search/flip?tn=baiduimage&ie=utf-8&word=' + word + '&ct=201326592&v=flip'
     result = requests.get(url)
-    dowmloadPic(result.text, word)
+    if source == '百度':
+        dowmloadPic(result.text, word)
+    if source == '搜狗':
+        getSogoulmag(data,60,'../bird/blog/images/')
     if data:
         return HttpResponse('SUCCESS')
     HttpResponse('ERROR')
@@ -156,6 +160,38 @@ def dowmloadPic(html, keyword):
         data.write('\r\n')
         data.close()
         i += 1
+
+def getSogoulmag(category,length,path):
+    # 搜狗爬虫
+    n=length
+    cate=category
+    # 获取的是图片所有信息
+    imgs=requests.get('http://pic.sogou.com/pics/channel/getAllRecomPicByTag.jsp?category='+cate+
+                      '&tag=%E5%85%A8%E9%83%A8&start=0&len='+str(n))
+
+    # 转换成为json格式
+    jd=json.loads(imgs.text)
+    # all_items所有的图片
+    jd=jd['all_items']
+
+    imgs_t=[]
+    for j in jd:
+        # 通过定位bthumbUrl获取图片
+        imgs_t.append(j['bthumbUrl'])
+    m=1
+    for img in imgs_t:
+        # 打印某一张图片正在下载
+        # print(str(m)+'.jpg'+'Downlod......')
+        print(img)
+        data = open(r"../bird/blog/address.txt","a+")
+        txt = str(m) + '  ' + str(img)
+        data.write(txt)
+        data.write('\r\n')
+        data.close()
+        # 用来把远程数据下载到本地
+        urllib.request.urlretrieve(img,path+cate+'_'+str(m)+'.jpg')
+        m=m+1
+    print('Complete!')
 
 '''
 **********图像标记页面的请求**********
